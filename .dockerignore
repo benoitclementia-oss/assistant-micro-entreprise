@@ -1,0 +1,9 @@
+node_modules
+frontend
+qdrant_storage
+n8n_data
+data
+.env
+.git
+__pycache__
+*.pyc

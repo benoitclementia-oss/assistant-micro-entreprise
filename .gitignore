@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Docker
+docker-compose.override.yml
+
+# Qdrant data
+qdrant_storage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Logs
+*.log
+logs/
+
+# Claude Code
+.claude/
+
+# Data (bases, cache, documents générés)
+data/cache/
+data/*.db
+data/documents/
+
+# n8n Docker volume
+n8n_data/
+
+# Rapports de test (régénérés par pytest, archivés en CI)
+reports/
+
+# pytest cache
+.pytest_cache/
+
+# mypy cache
+.mypy_cache/
+
+# ruff cache
+.ruff_cache/
+
+# coverage
+.coverage
+htmlcov/
+
+# Artefacts Windows
+nul

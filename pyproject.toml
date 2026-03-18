@@ -1,0 +1,109 @@
+[project]
+name = "assistant-micro-entreprise"
+version = "0.1.0"
+description = "Assistant juridique IA pour micro-entrepreneurs — RAG sur textes de loi français"
+requires-python = ">=3.12"
+
+# ──────────────────────────────────────────────
+# pytest — configuration des tests
+# ──────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Rapports conservés dans reports/ pour traçabilité
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "--junitxml=reports/junit.xml",
+    "--cov=agent",
+    "--cov=api",
+    "--cov=scripts",
+    "--cov-report=term-missing",
+    "--cov-report=html:reports/coverage_html",
+    "--cov-report=json:reports/coverage.json",
+    "--cov-report=xml:reports/coverage.xml",
+]
+
+markers = [
+    "slow: tests lents (appels réseau, gros volumes)",
+    "integration: tests d'intégration (nécessitent Docker/services)",
+]
+
+# ──────────────────────────────────────────────
+# coverage — seuils et exclusions
+# ──────────────────────────────────────────────
+[tool.coverage.run]
+source = ["agent", "api", "scripts"]
+omit = [
+    "*/tests/*",
+    "*/conftest.py",
+    "scripts/config.py",
+]
+
+[tool.coverage.report]
+fail_under = 28
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "raise NotImplementedError",
+    "pass",
+]
+
+# ──────────────────────────────────────────────
+# ruff — linting et formatage Python
+# ──────────────────────────────────────────────
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["agent", "api", "scripts", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle erreurs
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort (tri des imports)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade (syntaxe moderne Python 3.12+)
+    "B",    # bugbear (erreurs courantes)
+    "S",    # bandit (sécurité)
+    "T20",  # détection de print() oubliés
+    "SIM",  # simplifications de code
+]
+ignore = [
+    "S101",  # utilisation de assert dans les tests — OK
+    "T201",  # print() dans les scripts CLI — OK
+    "S324",  # MD5 utilisé pour IDs déterministes, pas pour la crypto
+    "S608",  # SQL paramétré (faux positif ruff sur f-string SET)
+    "S701",  # Jinja2 autoescape=False — templates Markdown, pas HTML
+    "S113",  # requests sans timeout — géré par rate limiting custom
+    "S110",  # try-except-pass dans validate_packs — intentionnel
+    "E501",  # lignes longues — toléré pour lisibilité des descriptions
+    "B905",  # zip() sans strict= — compatible Python 3.12
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S106"]
+"agent/cli.py" = ["T201"]
+"agent/__main__.py" = ["T201"]
+"scripts/ingest.py" = ["T201"]
+"api/routers/*" = ["B008", "B904"]  # FastAPI Depends() pattern + HTTPException re-raise
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ──────────────────────────────────────────────
+# mypy — vérification de types (mode progressif)
+# ──────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
