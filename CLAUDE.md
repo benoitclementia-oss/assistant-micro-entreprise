@@ -29,7 +29,7 @@
 docker compose up -d
 
 # API backend
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 
 # Tests + couverture
 python -m pytest

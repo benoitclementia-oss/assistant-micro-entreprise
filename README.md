@@ -105,7 +105,7 @@ docker compose up -d
 pip install -r requirements.txt
 
 # Lancer le serveur API
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### 3. Ingérer les textes juridiques
